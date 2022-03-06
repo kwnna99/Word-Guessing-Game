@@ -8,8 +8,11 @@ const phrases=['The book was on the table',
 'I waited for a while'];
 const overlayButton=document.querySelector('#overlay .btn__reset');
 const overlay= document.getElementById('overlay');
+const lives=document.querySelectorAll('.tries img');
 
-
+/**
+ * Event listener for the button of the overlay screen. Resets the game if the screen represents the win or lose state.
+ */
 overlayButton.addEventListener('click',()=>{
     overlay.style.display='none';
     if(overlay.className==='win' || overlay.className==='lose'){
@@ -17,12 +20,26 @@ overlayButton.addEventListener('click',()=>{
     }
 });
 
+/**
+ * Randomly selects a phrase from the phrases array and breaks it into its characters
+ * @param {arr} An array of strings to choose from 
+ * @returns a tokenized list with the letters of the randomly chosen phrase
+ */
 function getRandomPhraseAsArray(arr){
     let phrase= arr[Math.floor(Math.random()*arr.length)];
     return phrase.split('');
 }
 
+
+/**
+ * Receives an array of characters and adds it to the screen via li elements
+ * @param {arr} an array of characters
+ */
 function addPhraseToDisplay(arr){
+    /**
+     * Creates a li item with the desired character and adds it to the list
+     * @param {character} a character to add to the ul element 
+     */
     function createAndAppendLi(character){
         const li=document.createElement('li');
         li.textContent=character;
@@ -38,6 +55,11 @@ function addPhraseToDisplay(arr){
     }
 }
 
+/**
+ * Checks if a letter exists in the randomly chosen phrase
+ * @param {letter} the letter to check 
+ * @returns the letter if it exists or null if it does not exist in the phrase
+ */
 function checkLetter(letter){
     let result=null;
     const letters=document.getElementsByClassName('letter');
@@ -50,6 +72,9 @@ function checkLetter(letter){
     return result;
 }
 
+/**
+ * Clears the board, removes the disabled state and classes of buttons and re-generates a new phrase
+ */
 function retry(){
     missed=0;
     const keyboardButtons=document.querySelectorAll("#qwerty button");
@@ -57,13 +82,16 @@ function retry(){
         keyboardButtons[i].disabled=false;
         keyboardButtons[i].className='';
     }
-    const tries=document.querySelectorAll('.tries img');
-    for(let j=0;j<tries.length;j++){
-        tries[j].src="images/liveHeart.png";
+    for(let j=0;j<lives.length;j++){
+        lives[j].src="images/liveHeart.png";
     }
     phrase.innerHTML="";
     addPhraseToDisplay(getRandomPhraseAsArray(phrases));
 }
+
+/**
+ * Checks if the player wins or loses the game
+ */
 
 function checkWin(){
     if (document.getElementsByClassName('show').length===document.getElementsByClassName('letter').length){
@@ -79,17 +107,21 @@ function checkWin(){
     }
 }
 
+/**
+ * Event listener for the buttons of the keyboard 
+ */
 qwerty.addEventListener('click',(e)=>{
     if(e.target.tagName==='BUTTON'){
         e.target.className='chosen';
         e.target.disabled=true;
         const letterFound=checkLetter(e.target.textContent);
         if(letterFound===null){
-            document.querySelectorAll('.tries img')[missed].src="images/lostHeart.png";
+            lives[missed].src="images/lostHeart.png";
             missed+=1;
         }
     }
     checkWin();
 });
+
 const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray); 
