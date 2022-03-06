@@ -15,9 +15,7 @@ const lives=document.querySelectorAll('.tries img');
  */
 overlayButton.addEventListener('click',()=>{
     overlay.style.display='none';
-    if(overlay.className==='win' || overlay.className==='lose'){
-        retry();
-    }
+        initialize();
 });
 
 /**
@@ -48,7 +46,7 @@ function addPhraseToDisplay(arr){
         }else if(character===' '){
             li.className='space';
         }
-        phrase.appendChild(li);
+        phrase.firstElementChild.appendChild(li);
     }
     for(let i=0; i<arr.length; i++){
        createAndAppendLi(arr[i]); 
@@ -73,9 +71,9 @@ function checkLetter(letter){
 }
 
 /**
- * Clears the board, removes the disabled state and classes of buttons and re-generates a new phrase
+ * Clears the board, removes the disabled state and classes of buttons and generates a new phrase
  */
-function retry(){
+function initialize(){
     missed=0;
     const keyboardButtons=document.querySelectorAll("#qwerty button");
     for(let i=0; i<keyboardButtons.length; i++){
@@ -85,7 +83,7 @@ function retry(){
     for(let j=0;j<lives.length;j++){
         lives[j].src="images/liveHeart.png";
     }
-    phrase.innerHTML="";
+    phrase.firstElementChild.innerHTML="";
     addPhraseToDisplay(getRandomPhraseAsArray(phrases));
 }
 
@@ -122,6 +120,3 @@ qwerty.addEventListener('click',(e)=>{
     }
     checkWin();
 });
-
-const phraseArray = getRandomPhraseAsArray(phrases);
-addPhraseToDisplay(phraseArray); 
