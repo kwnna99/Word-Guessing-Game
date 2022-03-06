@@ -11,11 +11,11 @@ const overlay= document.getElementById('overlay');
 const lives=document.querySelectorAll('.tries img');
 
 /**
- * Event listener for the button of the overlay screen. Resets the game if the screen represents the win or lose state.
+ * Event listener for the button of the overlay screen. Hides the overlay and initializes a new round
  */
 overlayButton.addEventListener('click',()=>{
     overlay.style.display='none';
-        initialize();
+    initialize();
 });
 
 /**
@@ -84,7 +84,8 @@ function initialize(){
         lives[j].src="images/liveHeart.png";
     }
     phrase.firstElementChild.innerHTML="";
-    addPhraseToDisplay(getRandomPhraseAsArray(phrases));
+    const phraseArray = getRandomPhraseAsArray(phrases);
+    addPhraseToDisplay(phraseArray); 
 }
 
 /**
